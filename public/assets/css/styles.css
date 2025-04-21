@@ -1,44 +1,45 @@
-body {
-    background: #000;
-    color: #fff;
-    font-family: 'Arial Black', sans-serif;
-    margin: 0;
-    line-height: 1.4;
+/* public/css/styles.css */
+
+:root {
+    --neon-rojo: #ff1a1a;
+    --degradado-viral: linear-gradient(45deg, #ff1a1a 0%, #ff0066 100%);
+    --sombra-viral: 0 0 15px rgba(255, 26, 26, 0.5);
 }
 
-.header-urgente {
-    background: #ff0000;
+/* Diseño Mobile First */
+.grid-noticias {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     padding: 1rem;
-    text-align: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
 
-.noticia-impactante {
-    border: 3px solid #ff0000;
-    margin: 1rem;
+.noticia-viral {
+    background: #1a1a1a;
     border-radius: 15px;
-    overflow: hidden;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
     position: relative;
+    overflow: hidden;
+    color: #fff; /* Asegura que el texto sea blanco sobre el fondo oscuro */
 }
 
-.img-viral {
-    width: 100%;
-    height: 60vh;
-    object-fit: cover;
-    filter: brightness(1.1) contrast(1.2);
+.noticia-viral:hover {
+    transform: scale(1.03);
+    box-shadow: var(--sombra-viral);
 }
 
 .badge-urgente {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: #ff0000;
-    padding: 8px 15px;
+    background: var(--degradado-viral);
+    padding: 5px 15px;
     border-radius: 20px;
-    font-weight: bold;
-    animation: parpadeo 1s infinite;
+    font-size: 0.8rem;
+    animation: parpadeo 1.5s infinite;
+    color: white; /* Asegura que el texto del badge sea blanco */
+    z-index: 10; /* Para que esté encima de la imagen si la hubiera */
 }
 
 @keyframes parpadeo {
@@ -46,73 +47,200 @@ body {
     50% { opacity: 0.5; }
 }
 
-.btn-compartir {
-    background: #25D366;
-    border: none;
-    padding: 12px 25px;
-    margin: 10px;
-    border-radius: 50px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.3s;
+/* Títulos Adictivos */
+.titulo-click {
+    font-size: 1.4rem;
+    line-height: 1.3;
+    margin: 1rem 0;
+    /* Mantienes el degradado para el texto, pero asegúrate de que se vea bien */
+    background: linear-gradient(45deg, #fff, #ff9999);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Para navegadores que no soportan text-fill-color */
+    color: #fff;
 }
 
-.btn-compartir:hover {
-    transform: scale(1.1);
-}
-:root {
-    --color-viral: #FF3B3B;
-    --color-fondo: #0F0F0F;
-    --color-texto: #FFFFFF;
-    --animacion: cubic-bezier(0.4, 0, 0.2, 1);
+/* Botones de Compartir */
+.botones-virales {
+    margin-top: 1rem;
 }
 
+.boton-compartir {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 25px;
+    background: var(--degradado-viral);
+    color: white !important; /* Usar !important puede ser necesario para anular estilos por defecto */
+    text-decoration: none !important;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.boton-compartir:hover {
+    transform: rotate(-3deg) scale(1.05);
+    opacity: 0.9; /* Ligeramente transparente al pasar el mouse */
+}
+
+.boton-compartir i {
+    margin-right: 8px; /* Espacio entre icono y texto */
+}
+
+/* Estilos adicionales para tu layout */
 body {
-    background: var(--color-fondo);
-    color: var(--color-texto);
-    font-family: 'Inter', sans-serif;
-    line-height: 1.6;
+    font-family: sans-serif;
+    background-color: #0a0a0a; /* Fondo muy oscuro */
+    color: #fff;
+    margin: 0;
+    padding: 0;
 }
 
-.header-viral {
-    position: sticky;
-    top: 0;
-    background: rgba(15, 15, 15, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
+.nav-viral {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a1a1a;
+    padding: 10px 20px;
+    border-bottom: 2px solid var(--neon-rojo);
 }
 
-.titulo-impactante {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    text-shadow: 2px 2px 10px rgba(255, 59, 59, 0.4);
-    line-height: 1.1;
+.logo-neon {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--neon-rojo);
+    text-shadow: 0 0 5px var(--neon-rojo), 0 0 10px var(--neon-rojo), 0 0 15px var(--neon-rojo);
 }
 
-.grid-viral {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+.enlaces-virales a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.enlaces-virales a:hover {
+    color: var(--neon-rojo);
+}
+
+.menu-movil { /* Este elemento solo se muestra en mobile */
+    display: none;
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+
+.contador-vivo {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 10px;
+    background-color: #222;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.contador-vivo span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+.newsletter-bomba {
+    background: #1a1a1a;
+    border-top: 2px solid var(--neon-rojo);
     padding: 2rem;
+    text-align: center;
+    margin-top: 2rem;
 }
 
-.noticia-viral {
-    border-radius: 15px;
-    overflow: hidden;
-    transition: transform 0.3s var(--animacion);
-    position: relative;
+.newsletter-bomba h3 {
+    color: var(--neon-rojo);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 3px var(--neon-rojo);
 }
 
-.noticia-viral:hover {
-    transform: translateY(-5px);
+.newsletter-bomba p {
+    margin-bottom: 1.5rem;
 }
 
-/* Efecto de carga progresiva */
-.skeleton {
-    background: #1A1A1A;
-    animation: carga 1.5s infinite;
+.newsletter-bomba .input-viral {
+    padding: 10px 15px;
+    margin-right: 10px;
+    border-radius: 20px;
+    border: 1px solid #555;
+    background-color: #333;
+    color: #fff;
+    font-size: 1rem;
 }
 
-@keyframes carga {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+.newsletter-bomba .boton-compartir {
+    /* Reutiliza los estilos del botón de compartir */
 }
+
+
+.stats-virales {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin-top: 0.5rem;
+}
+
+.stats-virales span {
+    margin-right: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .grid-noticias {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-viral {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .enlaces-virales {
+        margin-top: 10px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .enlaces-virales a {
+        margin: 5px 0;
+    }
+
+    .contador-vivo {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .newsletter-bomba .input-viral {
+        display: block;
+        margin: 10px auto;
+        width: 80%; /* Ajusta el ancho en móviles */
+    }
+}
+/* public/css/styles.css */
+
+/* ... (tus estilos existentes) ... */
+
+.noticia-viral img {
+    display: block; /* Asegura que la imagen ocupe su propia línea */
+    max-width: 100%; /* La imagen no excederá el ancho de su contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    border-radius: 8px; /* Esquinas redondeadas */
+    margin-top: 1rem; /* Espacio encima de la imagen */
+    margin-bottom: 1rem; /* Espacio debajo de la imagen (opcional) */
+}
+
+/* Si quieres que la imagen se ajuste a un tamaño específico o tenga un aspecto particular */
+/* .noticia-viral img {
+    width: 100%;
+    height: 200px; /* O un valor fijo o automático */
+    /* object-fit: cover; /* Recorta la imagen para que cubra el área */
+/* } */
