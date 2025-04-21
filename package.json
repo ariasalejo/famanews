@@ -1,0 +1,12 @@
+{
+  "name": "famanews",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "serve public",
+    "build": "npm run copy-data",
+    "copy-data": "mkdir -p public/assets/data && cp src/data/news.json public/assets/data/"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  }
+}

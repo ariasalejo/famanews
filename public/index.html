@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 FamaNews | Noticias que Queman</title>
+    
+    <!-- Open Graph Optimizado -->
+    <meta property="og:title" content="¡ESTA NOTICIA ESTÁ EXPLOTANDO AHORA MISMO!">
+    <meta property="og:image" content="https://tuservidor.com/og-viral.webp">
+    <meta property="og:url" content="https://tuservidor.com/noticia-ultimo-escandalo">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Estilos Ultra-Virales -->
+    <style>
+    :root {
+        --neon-rojo: #ff1a1a;
+        --degradado-viral: linear-gradient(45deg, #ff1a1a 0%, #ff0066 100%);
+        --sombra-viral: 0 0 15px rgba(255, 26, 26, 0.5);
+    }
+
+    /* Diseño Mobile First */
+    .grid-noticias {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        padding: 1rem;
+    }
+
+    .noticia-viral {
+        background: #1a1a1a;
+        border-radius: 15px;
+        padding: 1.5rem;
+        transition: transform 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .noticia-viral:hover {
+        transform: scale(1.03);
+        box-shadow: var(--sombra-viral);
+    }
+
+    .badge-urgente {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: var(--degradado-viral);
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        animation: parpadeo 1.5s infinite;
+    }
+
+    @keyframes parpadeo {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    /* Títulos Adictivos */
+    .titulo-click {
+        font-size: 1.4rem;
+        line-height: 1.3;
+        margin: 1rem 0;
+        background: linear-gradient(45deg, #fff, #ff9999);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Botones de Compartir */
+    .boton-compartir {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 25px;
+        background: var(--degradado-viral);
+        color: white !important;
+        text-decoration: none !important;
+        transition: all 0.3s;
+    }
+
+    .boton-compartir:hover {
+        transform: rotate(-3deg) scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+        .grid-noticias {
+            grid-template-columns: 1fr;
+        }
+        
+        .nav-viral {
+            flex-direction: column;
+            padding: 10px;
+        }
+        
+        .contador-vivo {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+    </style>
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+</head>
+<body>
+
+<!-- Nav Ultra Responsivo -->
+<nav class="nav-viral">
+    <div class="logo-neon">FamaNews</div>
+    <div class="menu-movil">☰</div>
+    <div class="enlaces-virales">
+        <a href="#virales" class="link-ardiente">🔥 Virales</a>
+        <a href="#shock" class="link-ardiente">💣 Shock</a>
+        <a href="#exclusivas" class="link-ardiente">🕵️ Exclusivas</a>
+    </div>
+</nav>
+
+<!-- Contador de Urgencia -->
+<div class="contador-vivo">
+    <span class="contador">🚨 <span id="vistas">2,456,789</span> Vistas</span>
+    <span class="contador">💥 <span id="compartidos">156,234</span> Compartidos</span>
+</div>
+
+<!-- Grid de Noticias Dinámicas -->
+<main class="grid-noticias" id="gridNoticias">
+    <!-- Noticias cargadas dinámicamente -->
+</main>
+
+<!-- Newsletter Viral -->
+<div class="newsletter-bomba">
+    <h3>📧 ¡Conviértete en Viral Master!</h3>
+    <p>Recibe noticias 1 HORA ANTES que todos</p>
+    <input type="email" placeholder="tucorreo@ejemplo.com" class="input-viral">
+    <button class="boton-compartir">¡Quiero Ser Viral! 🚀</button>
+</div>
+
+<!-- Scripts de Viralidad -->
+<script>
+// Datos de Noticias Virales
+const noticiasVirales = [
+    {
+        titulo: "¡ESCÁNDALO! Video Prohibido de Famoso Revelado",
+        vistas: "1.2M",
+        compartir: "45K",
+        tag: "EXCLUSIVA"
+    },
+    {
+        titulo: "Reto de TikTok que Tiene Aterrorizados a Padres",
+        vistas: "2.8M",
+        compartir: "189K",
+        tag: "ALERTA"
+    }
+];
+
+// Generar Noticias
+function generarNoticias() {
+    const grid = document.getElementById('gridNoticias');
+    noticiasVirales.forEach(noticia => {
+        grid.innerHTML += `
+            <article class="noticia-viral">
+                <span class="badge-urgente">${noticia.tag}</span>
+                <h3 class="titulo-click">${noticia.titulo}</h3>
+                <div class="stats-virales">
+                    <span>👁️ ${noticia.vistas} vistas</span>
+                    <span>📤 ${noticia.compartir} compartidos</span>
+                </div>
+                <div class="botones-virales">
+                    <a href="#" class="boton-compartir"><i class="fab fa-tiktok"></i> TikTok</a>
+                    <a href="#" class="boton-compartir"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                </div>
+            </article>
+        `;
+    });
+}
+
+// Contador Fake
+function actualizarContador() {
+    const vistas = document.getElementById('vistas');
+    const compartidos = document.getElementById('compartidos');
+    
+    setInterval(() => {
+        vistas.textContent = (parseInt(vistas.textContent.replace(/,/g, '')) + Math.floor(Math.random() * 1000)).toLocaleString();
+        compartidos.textContent = (parseInt(compartidos.textContent.replace(/,/g, '')) + Math.floor(Math.random() * 500)).toLocaleString();
+    }, 3000);
+}
+
+// Service Worker para Caché
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+}
+
+// Inicialización
+window.onload = () => {
+    generarNoticias();
+    actualizarContador();
+};
+</script>
+
+</body>
+</html>

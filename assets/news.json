@@ -1,0 +1,43 @@
+// src/data/news.json
+[
+  {
+    "id": 1,
+    "title": "🔥 ¡ESTO LO CAMBIARÁ TODO! El Video PROHIBIDO que las Redes Quieren Censurar",
+    "content": "Un influencer top filtró material que revela los secretos oscuros de las celebridades. ¿Qué ocultan realmente? DESCÚBRELO ANTES QUE LO BORREN!",
+    "image": "video-prohibido.webp",
+    "views": "5.2M",
+    "shares": "238K",
+    "category": "shock",
+    "timestamp": "2025-04-21T20:15:00Z"
+  },
+  {
+    "id": 2,
+    "title": "🚨 ¡TIKTOK EN CRISIS! El Reto Peligroso que Tiene Aterrorizados a los Padres",
+    "content": "Jóvenes arriesgan sus vidas por likes: 'Es una bomba de tiempo' advierten expertos. ¿Participarías por fama?",
+    "image": "reto-peligroso.webp",
+    "views": "3.8M",
+    "shares": "154K",
+    "category": "tendencias",
+    "timestamp": "2025-04-21T19:45:00Z"
+  },
+  {
+    "id": 3,
+    "title": "💣 EL SECRETO DE YOUTUBE: Así Manipulan Tus Emociones para Hacerte Adicto",
+    "content": "Ex-empleado revela algoritmos siniestros: 'Te hacen enganchar hasta morir'. ¿Eres víctima del sistema?",
+    "image": "algoritmo-oscuro.webp",
+    "views": "4.5M",
+    "shares": "198K",
+    "category": "exclusivas",
+    "timestamp": "2025-04-21T19:00:00Z"
+  },
+  {
+    "id": 4,
+    "title": "🤯 ¡DESCARGA YA! La App que Todos Usan en Secreto (y No Quieren que Sepas)",
+    "content": "Funcionalidades 'hot' que explotan en chats privados. ¿Te atreves a probarla?",
+    "image": "app-secreta.webp",
+    "views": "6.1M",
+    "shares": "305K",
+    "category": "tech-viral",
+    "timestamp": "2025-04-21T18:30:00Z"
+  }
+]

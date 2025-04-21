@@ -1,0 +1,118 @@
+body {
+    background: #000;
+    color: #fff;
+    font-family: 'Arial Black', sans-serif;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.header-urgente {
+    background: #ff0000;
+    padding: 1rem;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.noticia-impactante {
+    border: 3px solid #ff0000;
+    margin: 1rem;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+.img-viral {
+    width: 100%;
+    height: 60vh;
+    object-fit: cover;
+    filter: brightness(1.1) contrast(1.2);
+}
+
+.badge-urgente {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff0000;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    animation: parpadeo 1s infinite;
+}
+
+@keyframes parpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.btn-compartir {
+    background: #25D366;
+    border: none;
+    padding: 12px 25px;
+    margin: 10px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.btn-compartir:hover {
+    transform: scale(1.1);
+}
+:root {
+    --color-viral: #FF3B3B;
+    --color-fondo: #0F0F0F;
+    --color-texto: #FFFFFF;
+    --animacion: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+}
+
+.header-viral {
+    position: sticky;
+    top: 0;
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+.titulo-impactante {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    text-shadow: 2px 2px 10px rgba(255, 59, 59, 0.4);
+    line-height: 1.1;
+}
+
+.grid-viral {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.noticia-viral {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s var(--animacion);
+    position: relative;
+}
+
+.noticia-viral:hover {
+    transform: translateY(-5px);
+}
+
+/* Efecto de carga progresiva */
+.skeleton {
+    background: #1A1A1A;
+    animation: carga 1.5s infinite;
+}
+
+@keyframes carga {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
