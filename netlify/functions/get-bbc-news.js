@@ -6,74 +6,46 @@ const parser = new RSSParser();
 const feedUrl = 'http://feeds.bbci.co.uk/news/rss.xml';
 
 exports.handler = async function(event, context) {
-  console.log(`[Function] Recibida petición para obtener feed de: ${feedUrl}`);
-
-  // Manejar preflight OPTIONS
   if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type"
-      },
-      body: ''
-    };
+    return { /* ... */ };
   }
 
   try {
     const feed = await parser.parseURL(feedUrl);
-    console.log(`[Function] Feed obtenido. Items: ${feed.items.length}`);
-
+    
     const noticias = feed.items.map(item => {
-      // Extraer imagen del contenido HTML
+      // 1. Extraer imagen del contenido HTML con regex mejorado
       const contenido = item.content || item.description || '';
-      const imagenFromContent = contenido.match(/<img[^>]+src="([^">]+)"/)?.[1] || '';
+      const imagenMatch = contenido.match(/<img[^>]+src=["']([^"']+)["']/i);
+      let imagenUrl = imagenMatch ? imagenMatch[1] : '';
       
-      // Convertir URLs relativas a absolutas si es necesario
-      const imagenUrlRelativa = imagenFromContent.startsWith('/') 
-        ? `https://www.bbc.com${imagenFromContent}` 
-        : imagenFromContent;
+      // 2. Corregir URLs relativas y protocolo-http
+      if (imagenUrl) {
+        if (imagenUrl.startsWith('//')) {
+          imagenUrl = `https:${imagenUrl}`;  // URLs tipo //ichef.bbci.co.uk/...
+        } else if (imagenUrl.startsWith('/')) {
+          imagenUrl = `https://www.bbc.com${imagenUrl}`;
+        }
+      }
 
-      // Orden de prioridad para imágenes
-      const imagenUrl = item.enclosure?.url ||
-                       item['media:content']?.url ||
-                       item['media:thumbnail']?.url ||
-                       imagenUrlRelativa || // Usamos la URL convertida
-                       item.itunes?.image?.href ||
-                       'https://via.placeholder.com/300';
+      // 3. Prioridad de fuentes de imagen
+      const imagenFinal = imagenUrl ||
+                         item.enclosure?.url ||
+                         item['media:content']?.url ||
+                         'https://via.placeholder.com/300';
 
-      console.log('Imagen detectada:', imagenUrl); // Para depuración
+      console.log('Imagen procesada:', imagenFinal);
 
       return {
         titulo: item.title,
         link: item.link,
         fecha: item.pubDate,
         contenidoCorto: item.contentSnippet,
-        imagenUrl: imagenUrl
+        imagenUrl: imagenFinal
       };
     });
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      },
-      body: JSON.stringify(noticias)
-    };
+    return { /* ... */ };
 
-  } catch (error) {
-    console.error('[Function] Error:', error);
-    return {
-      statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      },
-      body: JSON.stringify({
-        error: 'Error cargando noticias',
-        details: error.message
-      })
-    };
-  }
+  } catch (error) { /* ... */ }
 };
