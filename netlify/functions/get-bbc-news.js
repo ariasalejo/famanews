@@ -3,7 +3,7 @@ const parser = new RSSParser();
 
 const feedUrl = 'http://feeds.bbci.co.uk/news/rss.xml';
 
-exports.handler = async function(event, context) {
+exports.handler = async function (event, context) {
   // Manejo de solicitudes OPTIONS para CORS
   if (event.httpMethod === 'OPTIONS') {
     return {
@@ -20,21 +20,53 @@ exports.handler = async function(event, context) {
     // Parsear el feed RSS
     const feed = await parser.parseURL(feedUrl);
 
-    // Obtener parámetros de paginación de la solicitud
+    // Obtener parámetros de paginación
     const page = parseInt(event.queryStringParameters?.page || '1', 10);
     const pageSize = 10; // Número de noticias por página
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
 
-    // Mapear noticias y priorizar imágenes desde media:thumbnail
+    // Procesar noticias
     const noticias = feed.items.map(item => {
-      const titulo = item.title || 'Sin título';
-      const link = item.link || '#';
-      const fecha = item.pubDate || 'Fecha no disponible';
-      const contenidoCorto = item.contentSnippet || 'Contenido no disponible';
-      const imagenUrl = item['media:thumbnail']?.url || 'https://via.placeholder.com/300';
+      let imagenUrl = '';
 
-      return { titulo, link, fecha, contenidoCorto, imagenUrl };
+      // Priorizar media:thumbnail
+      if (item['media:thumbnail']?.url) {
+        imagenUrl = item['media:thumbnail'].url;
+      } 
+      // Intentar con enclosure.url
+      else if (item.enclosure?.url) {
+        imagenUrl = item.enclosure.url;
+      } 
+      // Extraer imagen del contenido HTML
+      else if (item.content || item.description) {
+        const contenido = item.content || item.description;
+        const imagenMatch = contenido.match(/<img[^>]+src=["']([^"']+)["']/i);
+        imagenUrl = imagenMatch ? imagenMatch[1] : '';
+      }
+
+      // Corregir URLs relativas o sin protocolo
+      if (imagenUrl.startsWith('//')) {
+        imagenUrl = `https:${imagenUrl}`;
+      } else if (imagenUrl.startsWith('/')) {
+        imagenUrl = `https://www.bbc.com${imagenUrl}`;
+      }
+
+      // Usar marcador de posición si no hay imagen válida
+      if (!imagenUrl || !imagenUrl.startsWith('http')) {
+        imagenUrl = 'https://via.placeholder.com/300';
+      }
+
+      // Log para depuración
+      console.log('Imagen procesada:', imagenUrl);
+
+      return {
+        titulo: item.title || 'Sin título',
+        link: item.link || '#',
+        fecha: item.pubDate || 'Fecha no disponible',
+        contenidoCorto: item.contentSnippet || 'Contenido no disponible',
+        imagenUrl,
+      };
     });
 
     // Aplicar paginación
@@ -50,7 +82,6 @@ exports.handler = async function(event, context) {
       },
       body: JSON.stringify(noticiasPaginadas),
     };
-
   } catch (error) {
     console.error('Error al procesar las noticias:', error.message, error.stack);
     return {
