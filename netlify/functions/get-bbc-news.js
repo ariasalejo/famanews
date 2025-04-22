@@ -31,22 +31,21 @@ exports.handler = async function(event, context) {
 
     console.log(`[Function] Feed obtenido y parseado. Número de ítems: ${feed.items.length}`); // Log
 
-    // Mapea los ítems del feed a un formato más simple y busca URLs de imágenes
     const noticias = feed.items.map(item => {
-      const imagenUrl = item.enclosure?.url
-                        || item['media:content']?.url
-                        || item.itunes?.image?.href
-                        || null;
+  const imagenUrl = item.enclosure?.url
+                    || item['media:content']?.url
+                    || item['media:thumbnail']?.url // Agrega soporte a media:thumbnail
+                    || item.itunes?.image?.href
+                    || 'https://via.placeholder.com/300'; // Imagen predeterminada
 
-      return {
-        titulo: item.title,
-        link: item.link,
-        fecha: item.pubDate,
-        contenidoCorto: item.contentSnippet,
-        // contenidoHtml: item.content, // Opcional si lo necesitas en el frontend
-        imagenUrl: imagenUrl
-      };
-    });
+  return {
+    titulo: item.title,
+    link: item.link,
+    fecha: item.pubDate,
+    contenidoCorto: item.contentSnippet,
+    imagenUrl: imagenUrl
+  };
+});
 
     // --- Formato de respuesta para Netlify Functions ---
     // La función debe devolver un objeto con statusCode, headers y body (el body debe ser una cadena)
