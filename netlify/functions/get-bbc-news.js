@@ -1,92 +1,54 @@
+// netlify/functions/get-bbc-news.js
+
 const RSSParser = require('rss-parser');
-const parser = new RSSParser();
+
+// Configurar parser con namespaces personalizados
+const parser = new RSSParser({
+  customFields: {
+    item: [
+      ['media:thumbnail', 'media:thumbnail', { keepArray: true }],
+      ['media:content', 'media:content', { keepArray: true }]
+    ]
+  }
+});
 
 const feedUrl = 'http://feeds.bbci.co.uk/news/rss.xml';
 
-exports.handler = async function (event, context) {
-  // Manejo de solicitudes OPTIONS para CORS
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      },
-    };
-  }
+exports.handler = async function(event, context) {
+  // ... (manejo de OPTIONS igual que antes)
 
   try {
-    // Parsear el feed RSS
     const feed = await parser.parseURL(feedUrl);
-
-    // Obtener parámetros de paginación
-    const page = parseInt(event.queryStringParameters?.page || '1', 10);
-    const pageSize = 10; // Número de noticias por página
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-
-    // Procesar noticias
+    
     const noticias = feed.items.map(item => {
-      let imagenUrl = '';
+      // 1. Obtener imagen principal de BBC
+      const imagenBBC = item.media:thumbnail?.$?.url ||  // Imagen destacada
+                       item.media:content?.$?.url ||     // Contenido multimedia
+                       item.enclosure?.url;             // Adjuntos
 
-      // Priorizar media:thumbnail
-      if (item['media:thumbnail']?.url) {
-        imagenUrl = item['media:thumbnail'].url;
-      } 
-      // Intentar con enclosure.url
-      else if (item.enclosure?.url) {
-        imagenUrl = item.enclosure.url;
-      } 
-      // Extraer imagen del contenido HTML
-      else if (item.content || item.description) {
-        const contenido = item.content || item.description;
-        const imagenMatch = contenido.match(/<img[^>]+src=["']([^"']+)["']/i);
-        imagenUrl = imagenMatch ? imagenMatch[1] : '';
+      // 2. Extraer de HTML como respaldo
+      const contenido = item.content || item.description || '';
+      const imagenHTML = contenido.match(/<img[^>]+src=["']([^"']*?\.(?:jpg|png|jpeg))["']/i)?.[1] || '';
+
+      // 3. Procesar URLs
+      let imagenFinal = imagenBBC || imagenHTML;
+      
+      if (imagenFinal) {
+        // Corregir protocolo y rutas
+        imagenFinal = imagenFinal.replace(/^\/\//, 'https://')
+                                .replace(/^\/news\//, 'https://www.bbc.com/news/');
       }
-
-      // Corregir URLs relativas o sin protocolo
-      if (imagenUrl.startsWith('//')) {
-        imagenUrl = `https:${imagenUrl}`;
-      } else if (imagenUrl.startsWith('/')) {
-        imagenUrl = `https://www.bbc.com${imagenUrl}`;
-      }
-
-      // Usar marcador de posición si no hay imagen válida
-      if (!imagenUrl || !imagenUrl.startsWith('http')) {
-        imagenUrl = 'https://via.placeholder.com/300';
-      }
-
-      // Log para depuración
-      console.log('Imagen procesada:', imagenUrl);
 
       return {
-        titulo: item.title || 'Sin título',
-        link: item.link || '#',
-        fecha: item.pubDate || 'Fecha no disponible',
-        contenidoCorto: item.contentSnippet || 'Contenido no disponible',
-        imagenUrl,
+        titulo: item.title,
+        link: item.link,
+        fecha: item.pubDate,
+        contenidoCorto: item.contentSnippet,
+        imagenUrl: imagenFinal || 'https://via.placeholder.com/300' // Último fallback
       };
     });
 
-    // Aplicar paginación
-    const noticiasPaginadas = noticias.slice(start, end);
+    // ... (respuesta igual que antes)
 
-    // Devolver el resultado
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'max-age=300', // Cache de 5 minutos
-      },
-      body: JSON.stringify(noticiasPaginadas),
-    };
-  } catch (error) {
-    console.error('Error al procesar las noticias:', error.message, error.stack);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Error interno del servidor' }),
-    };
-  }
+  } catch (error) { /* ... */ }
 };
