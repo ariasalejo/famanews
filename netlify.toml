@@ -1,15 +1,28 @@
+# netlify.toml
+
 [build]
+  # Directorio que Netlify debe publicar (servir estáticamente)
   publish = "public"
-  command = "npm run build"
 
+  # Remueve o comenta la línea que intenta ejecutar 'npm run build'
+  # command = "npm run build" # <-- Elimina o comenta esta línea
+
+# Configuración opcional para Netlify Functions (necesario para que funcione la API)
+# Esto le dice a Netlify dónde buscar el código de tus funciones.
+# Necesitarás mover y adaptar tu lógica de backend aquí en un paso posterior.
+# [functions]
+#   directory = "netlify/functions" # Una carpeta común para funciones
+
+
+# Optional: Configuración de encabezados HTTP (visto en tu log, puedes mantenerlos si quieres)
 [[headers]]
   for = "/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000"
+    # Configura el cacheo para archivos estáticos. Cachear poco al principio es seguro.
+    Cache-Control = "public, max-age=0, must-revalidate"
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
+    # Los encabezados de seguridad que tenías (ajusta según necesites)
+    # Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    # X-Content-Type-Options = "nosniff"
+    # X-Frame-Options = "DENY"
+
