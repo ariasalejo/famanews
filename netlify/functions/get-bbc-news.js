@@ -1,42 +1,34 @@
 // netlify/functions/get-bbc-news.js
-
 const RSSParser = require('rss-parser');
 
-// Configurar parser con namespaces personalizados
 const parser = new RSSParser({
   customFields: {
     item: [
-      ['media:thumbnail', 'media:thumbnail', { keepArray: true }],
-      ['media:content', 'media:content', { keepArray: true }]
+      ['media:thumbnail', 'mediaThumbnail'],
+      ['media:content', 'mediaContent']
     ]
   }
 });
 
-const feedUrl = 'http://feeds.bbci.co.uk/news/rss.xml';
-
-exports.handler = async function(event, context) {
-  // ... (manejo de OPTIONS igual que antes)
+exports.handler = async (event) => {
+  // ... (manejo de OPTIONS previo)
 
   try {
-    const feed = await parser.parseURL(feedUrl);
+    const feed = await parser.parseURL('http://feeds.bbci.co.uk/news/rss.xml');
     
     const noticias = feed.items.map(item => {
-      // 1. Obtener imagen principal de BBC
-      const imagenBBC = item.media:thumbnail?.$?.url ||  // Imagen destacada
-                       item.media:content?.$?.url ||     // Contenido multimedia
-                       item.enclosure?.url;             // Adjuntos
-
-      // 2. Extraer de HTML como respaldo
-      const contenido = item.content || item.description || '';
-      const imagenHTML = contenido.match(/<img[^>]+src=["']([^"']*?\.(?:jpg|png|jpeg))["']/i)?.[1] || '';
-
-      // 3. Procesar URLs
-      let imagenFinal = imagenBBC || imagenHTML;
+      // Extracción de imagen BBC
+      const imagenBBC = item.mediaThumbnail?.$?.url || item.mediaContent?.$?.url;
       
-      if (imagenFinal) {
-        // Corregir protocolo y rutas
-        imagenFinal = imagenFinal.replace(/^\/\//, 'https://')
-                                .replace(/^\/news\//, 'https://www.bbc.com/news/');
+      // Extracción desde HTML
+      const imagenHTML = extractImageFromHTML(item.content || item.description);
+
+      // Procesar URL
+      let imagenFinal = procesarURL(imagenBBC || imagenHTML);
+
+      // Fallback con servicio temporal
+      if (!imagenFinal) {
+        imagenFinal = `https://picsum.photos/300/200?random=${Math.random()}`; // Imagen aleatoria
       }
 
       return {
@@ -44,11 +36,15 @@ exports.handler = async function(event, context) {
         link: item.link,
         fecha: item.pubDate,
         contenidoCorto: item.contentSnippet,
-        imagenUrl: imagenFinal || 'https://via.placeholder.com/300' // Último fallback
+        imagenUrl: imagenFinal
       };
     });
 
-    // ... (respuesta igual que antes)
+    return { /* ... (respuesta previa) */ };
 
   } catch (error) { /* ... */ }
 };
+
+// Helpers (igual que antes)
+const extractImageFromHTML = (html) => { /* ... */ };
+const procesarURL = (url) => { /* ... */ };
