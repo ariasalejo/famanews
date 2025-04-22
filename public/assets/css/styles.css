@@ -244,3 +244,352 @@ body {
     height: 200px; /* O un valor fijo o automático */
     /* object-fit: cover; /* Recorta la imagen para que cubra el área */
 /* } */
+/* public/css/styles.css */
+
+/* Asegúrate de que estas variables y estilos base existen */
+:root {
+    --neon-rojo: #ff1a1a;
+    --degradado-viral: linear-gradient(45deg, #ff1a1a 0%, #ff0066 100%);
+    --sombra-viral: 0 0 15px rgba(255, 26, 26, 0.5);
+    --color-texto-claro: #ddd; /* Un gris claro para texto secundario */
+    --color-fondo-tarjeta: #1a1a1a;
+}
+
+body {
+    font-family: 'Arial', sans-serif; /* Puedes elegir otra fuente viral si quieres */
+    background-color: #0d0d0d; /* Fondo muy oscuro */
+    color: #fff; /* Texto blanco por defecto */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6; /* Espacio entre líneas para mejor lectura */
+}
+
+/* --- Estilos de la Tarjeta de Noticias --- */
+.grid-noticias {
+    display: grid;
+    gap: 1.5rem; /* Aumenta un poco el espacio entre tarjetas */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding: 1.5rem; /* Aumenta un poco el padding general del grid */
+    max-width: 1200px; /* Limita el ancho máximo del grid */
+    margin: 2rem auto; /* Centra el grid en la página */
+}
+
+.noticia-viral {
+    background: var(--color-fondo-tarjeta);
+    border: 1px solid #333; /* Añade un borde sutil */
+    border-radius: 15px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden; /* Importante para el badge */
+    display: flex; /* Usa flexbox para organizar contenido interno */
+    flex-direction: column;
+    justify-content: space-between; /* Distribuye espacio verticalmente */
+}
+
+.noticia-viral:hover {
+    transform: scale(1.02); /* Ligeramente menos zoom */
+    box-shadow: var(--sombra-viral);
+    border-color: var(--neon-rojo); /* Borde que se ilumina al pasar el mouse */
+}
+
+/* --- Contenido dentro de la Tarjeta --- */
+.noticia-viral h3.titulo-click {
+    font-size: 1.5rem; /* Aumenta el tamaño del título */
+    line-height: 1.3;
+    margin: 0 0 1rem 0; /* Ajusta los márgenes */
+    background: linear-gradient(45deg, #fff, #ff9999);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #fff; /* Fallback color */
+    font-weight: bold;
+}
+
+.noticia-viral p {
+    font-size: 1rem;
+    color: var(--color-texto-claro); /* Color gris claro para el resumen */
+    margin-bottom: 1rem;
+    flex-grow: 1; /* Permite que el párrafo ocupe el espacio disponible */
+}
+
+.noticia-viral img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 0.5rem 0 1rem 0; /* Ajusta los márgenes de la imagen */
+    object-fit: cover; /* Asegura que la imagen cubra el área si estableces tamaño fijo después */
+    border: 1px solid #555; /* Borde sutil para la imagen */
+}
+
+
+.stats-virales {
+    font-size: 0.9rem;
+    color: #aaa; /* Un gris un poco más oscuro */
+    margin-top: 0.5rem;
+    margin-bottom: 1rem; /* Espacio antes de los botones */
+    display: flex; /* Para alinear íconos y texto */
+    align-items: center;
+    gap: 10px; /* Espacio entre elementos de estadísticas */
+}
+
+.stats-virales span i {
+    margin-right: 4px; /* Espacio entre ícono y texto de la estadística */
+    color: var(--neon-rojo); /* Color neón para los íconos */
+}
+
+
+/* --- Badge de Urgencia --- */
+.badge-urgente {
+    position: absolute;
+    top: 15px; /* Ajusta la posición */
+    right: 15px; /* Ajusta la posición */
+    background: var(--degradado-viral);
+    padding: 4px 12px; /* Ajusta el padding */
+    border-radius: 20px;
+    font-size: 0.7rem; /* Tamaño un poco más pequeño */
+    font-weight: bold;
+    color: white;
+    animation: parpadeo 1.5s infinite steps(1); /* Parpadeo más "on/off" */
+    z-index: 10;
+    text-transform: uppercase; /* Texto en mayúsculas */
+}
+
+@keyframes parpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; } /* Completa transparencia en el medio */
+}
+
+
+/* --- Botones de Compartir --- */
+.botones-virales {
+    margin-top: 1rem; /* Espacio arriba de los botones */
+    display: flex; /* Permite que los botones se alineen */
+    flex-wrap: wrap; /* Permite que los botones salten de línea en pantallas pequeñas */
+    gap: 10px; /* Espacio entre botones */
+}
+
+.boton-compartir {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 15px; /* Ajusta el padding */
+    border-radius: 25px;
+    background: var(--degradado-viral);
+    color: white !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Sombra sutil */
+    flex-shrink: 0; /* Evita que los botones se encojan */
+}
+
+.boton-compartir:hover {
+    transform: translateY(-2px); /* Efecto sutil hacia arriba */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4); /* Sombra más pronunciada */
+    opacity: 0.9;
+}
+
+.boton-compartir i {
+    margin-right: 6px; /* Espacio entre icono y texto */
+}
+
+/* --- Estilos de la Barra de Navegación (si la mantienes) --- */
+.nav-viral {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0a0a0a;
+    padding: 10px 20px;
+    border-bottom: 2px solid var(--neon-rojo);
+    color: #fff;
+    flex-wrap: wrap; /* Permite que los elementos de nav salten de línea */
+}
+
+.logo-neon {
+    font-size: 2rem; /* Tamaño un poco más grande */
+    font-weight: bold;
+    color: var(--neon-rojo);
+    text-shadow: 0 0 8px var(--neon-rojo), 0 0 12px var(--neon-rojo); /* Sombra más intensa */
+    margin-right: 20px; /* Espacio a la derecha del logo */
+}
+
+.enlaces-virales {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.enlaces-virales a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+    padding: 5px 0; /* Añade padding para áreas de clic */
+}
+
+.enlaces-virales a:hover {
+    color: var(--neon-rojo);
+    text-shadow: 0 0 5px var(--neon-rojo); /* Sombra sutil al pasar el mouse */
+}
+
+.menu-movil {
+    display: none; /* Oculto por defecto */
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
+    margin-left: auto; /* Empuja el icono móvil a la derecha */
+}
+
+
+/* --- Contador de Urgencia --- */
+.contador-vivo {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* Más espacio entre contadores */
+    padding: 15px;
+    background-color: #1c1c1c; /* Fondo ligeramente más claro que el body */
+    margin: 0; /* Sin margen superior/inferior, pegado al nav */
+    font-size: 1.2rem; /* Tamaño un poco más grande */
+    color: #eee;
+    border-bottom: 1px solid #333;
+}
+
+.contador-vivo span {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre icono y número */
+}
+
+.contador-vivo span i {
+     color: var(--neon-rojo); /* Color neón para los íconos */
+}
+
+/* --- Newsletter --- */
+.newsletter-bomba {
+    background: #1a1a1a;
+    border-top: 2px solid var(--neon-rojo);
+    padding: 2.5rem; /* Más padding */
+    text-align: center;
+    margin-top: 3rem; /* Más margen superior */
+    color: #fff;
+}
+
+.newsletter-bomba h3 {
+    color: var(--neon-rojo);
+    margin-bottom: 0.8rem;
+    text-shadow: 0 0 5px var(--neon-rojo); /* Sombra neón */
+    font-size: 1.8rem;
+}
+
+.newsletter-bomba p {
+    margin-bottom: 2rem;
+    color: var(--color-texto-claro);
+}
+
+.newsletter-bomba .input-viral {
+    padding: 12px 20px; /* Más padding */
+    margin-right: 15px; /* Más margen */
+    border-radius: 25px; /* Bordes más redondeados */
+    border: 1px solid #555;
+    background-color: #333;
+    color: #fff;
+    font-size: 1.1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    min-width: 250px; /* Ancho mínimo */
+}
+
+.newsletter-bomba .input-viral:focus {
+    outline: none; /* Elimina el borde de enfoque por defecto */
+    border-color: var(--neon-rojo); /* Borde neón al enfocar */
+    box-shadow: 0 0 8px rgba(255, 26, 26, 0.4); /* Sombra neón al enfocar */
+}
+
+.newsletter-bomba .boton-compartir {
+    /* Reutiliza estilos, pero puedes ajustar el padding si quieres */
+    padding: 12px 30px; /* Ligeramente más grande */
+}
+
+
+/* --- Mensajes de Carga/Error --- */
+.grid-noticias p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--color-texto-claro);
+    grid-column: 1 / -1; /* Para que el mensaje ocupe todo el ancho en el grid */
+}
+
+
+/* --- Responsive (Ajustes adicionales para mobile) --- */
+@media (max-width: 768px) {
+    .grid-noticias {
+        grid-template-columns: 1fr; /* Una columna en móviles */
+        padding: 1rem;
+        margin: 1rem auto;
+    }
+
+    .noticia-viral {
+         padding: 1rem;
+    }
+
+    .nav-viral {
+        flex-direction: column;
+        align-items: flex-start; /* Alinea los elementos a la izquierda en mobile */
+        padding: 10px;
+    }
+
+    .logo-neon {
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    .enlaces-virales {
+        flex-direction: column;
+        align-items: flex-start; /* Alinea enlaces a la izquierda */
+        width: 100%; /* Ocupa el ancho completo */
+        display: none; /* Oculta los enlaces por defecto, se mostrarían con JS al hacer clic en el menú móvil */
+    }
+
+    .enlaces-virales a {
+        margin: 5px 0;
+        width: 100%; /* Ocupa el ancho completo */
+        text-align: left;
+    }
+
+    .menu-movil {
+        display: block; /* Muestra el icono de menú en mobile */
+        position: absolute; /* Posiciona el icono de menú */
+        top: 15px;
+        right: 15px;
+    }
+
+    /* Una clase JS podría alternar la visibilidad de enlaces-virales en mobile */
+    /* .nav-viral.open .enlaces-virales {
+        display: flex;
+    } */
+
+
+    .contador-vivo {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .newsletter-bomba {
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .newsletter-bomba .input-viral {
+        display: block;
+        margin: 10px auto;
+        width: 90%; /* Ajusta el ancho */
+        box-sizing: border-box; /* Incluye padding y borde en el ancho */
+    }
+
+    .newsletter-bomba .boton-compartir {
+         margin-top: 10px; /* Espacio arriba del botón */
+    }
+}
