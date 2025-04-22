@@ -2,7 +2,7 @@
 
 // Este script se ejecuta en el navegador del usuario.
 // Es responsable de interactuar con el DOM (el HTML de la página)
-// y de comunicarse con el servidor backend para obtener datos.
+// y de comunicarse con el servidor backend (en este caso, la Netlify Function) para obtener datos.
 
 document.addEventListener('DOMContentLoaded', () => {
     // Obtiene los elementos HTML donde se mostrarán las noticias y los contadores.
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contadorVistas = document.getElementById('vistas');
     const contadorCompartidos = document.getElementById('compartidos');
 
-    // --- Función asíncrona para cargar y mostrar las noticias desde el backend ---
+    // --- Función asíncrona para cargar y mostrar las noticias desde la Netlify Function ---
     async function cargarNoticias() {
         try {
             // Muestra mensajes de carga iniciales en el grid y los contadores
@@ -18,13 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if(contadorVistas) contadorVistas.textContent = '...';
             if(contadorCompartidos) contadorCompartidos.textContent = '...';
 
-            // Realiza la llamada a tu endpoint de backend que obtiene el feed de la BBC
-            const response = await fetch('/api/noticias-bbc');
+            // *** ¡ACTUALIZACIÓN CRUCIAL PARA NETLIFY FUNCTIONS! ***
+            // Realiza la llamada al endpoint de la Netlify Function que obtiene el feed de la BBC.
+            // La URL es /.netlify/functions/ + el nombre del archivo de tu función (sin .js)
+            const response = await fetch('/.netlify/functions/get-bbc-news');
 
             // Verifica si la respuesta del servidor fue exitosa (código de estado 2xx)
             if (!response.ok) {
-                // Si la respuesta no es OK, lanza un error con el estado HTTP
-                throw new Error(`HTTP error! status: ${response.status}`);
+                // Si la respuesta no es OK, lanza un error con el estado HTTP y el mensaje de la respuesta si está disponible
+                 const errorBody = await response.text(); // Intenta leer el cuerpo del error
+                throw new Error(`HTTP error! status: ${response.status}. Body: ${errorBody.substring(0, 200)}...`); // Limita el cuerpo para evitar logs enormes
             }
 
             // Parsea el cuerpo de la respuesta como JSON para obtener el array de noticias
@@ -51,15 +54,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Formatea la fecha si está disponible en el formato deseado
                 // Date(noticia.fecha) convierte la fecha del feed a un objeto Date.
                 // toLocaleDateString() la formatea según la configuración regional del navegador.
-                const fecha = noticia.fecha ? new Date(noticia.fecha).toLocaleDateString() : '';
+                // Manejo de posible fecha inválida
+                const fechaObj = new Date(noticia.fecha);
+                const fecha = noticia.fecha && !isNaN(fechaObj) ? fechaObj.toLocaleDateString() : 'Fecha desconocida';
+
 
                 // Construye el HTML interno de la tarjeta de noticias
                 articleElement.innerHTML = `
-                    <span class="badge-urgente">BBC News</span> <h3 class="titulo-click">${noticia.titulo}</h3>
-                    ${noticia.contenidoCorto ? `<p>${noticia.contenidoCorto}</p>` : ''} ${noticia.imagenUrl ? // <-- Verifica si hay una URL de imagen
+                    <span class="badge-urgente">BBC News</span>
+                    <h3 class="titulo-click">${noticia.titulo}</h3>
+                    ${noticia.contenidoCorto ? `<p>${noticia.contenidoCorto}</p>` : ''}
+
+                    ${noticia.imagenUrl ? // <-- Verifica si hay una URL de imagen
                         // Si hay imagenUrl, crea una etiqueta <img>
-                        // Estilo inline básico para asegurar que la imagen se ajuste
-                        `<img src="${noticia.imagenUrl}" alt="${noticia.titulo}" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 1rem;">`
+                        // Estilo inline básico para asegurar que la imagen se ajuste.
+                        // Considera mover este estilo a styles.css para mayor limpieza.
+                        `<img src="${noticia.imagenUrl}" alt="${noticia.titulo || 'Imagen de noticia'}" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 1rem; margin-bottom: 1rem;">`
                         : '' // <-- Si no hay imagenUrl, no agrega la etiqueta <img>
                     }
 
@@ -120,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Si no lo necesitas o no tienes el archivo, puedes comentar o eliminar este bloque.
     if ('serviceWorker' in navigator) {
         // La ruta '/sw.js' es relativa a la raíz que sirve tu servidor Express (la carpeta public).
+        // En Netlify, '/sw.js' buscará el archivo sw.js en la raíz del directorio publicado (public).
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
                 console.log('Service Worker registrado con éxito:', registration);

@@ -5,7 +5,7 @@
   publish = "public"
 
   # Remueve o comenta la línea que intenta ejecutar 'npm run build'
-  # command = "npm run build" # <-- Elimina o comenta esta línea
+  # command = 
 
 # Configuración opcional para Netlify Functions (necesario para que funcione la API)
 # Esto le dice a Netlify dónde buscar el código de tus funciones.
