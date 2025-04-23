@@ -9,10 +9,8 @@
 
 # Configuración opcional para Netlify Functions (necesario para que funcione la API)
 # Esto le dice a Netlify dónde buscar el código de tus funciones.
-# Necesitarás mover y adaptar tu lógica de backend aquí en un paso posterior.
 # [functions]
 #   directory = "netlify/functions" # Una carpeta común para funciones
-
 
 # Optional: Configuración de encabezados HTTP (visto en tu log, puedes mantenerlos si quieres)
 [[headers]]
@@ -25,4 +23,3 @@
     # Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
     # X-Content-Type-Options = "nosniff"
     # X-Frame-Options = "DENY"
-
