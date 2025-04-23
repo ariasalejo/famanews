@@ -1,75 +1,88 @@
-const fetch = require('node-fetch');
+import Parser from 'rss-parser';
 
-// Configuración de feeds con respaldo alternativo
+const parser = new Parser();
+
+/**
+ * Sección 1: Configuración de feeds y categorías
+ * Configura las URLs de los feeds RSS en las categorías deseadas.
+ */
 const FEEDS = {
   deportes: [
     "http://www.espn.com/espn/rss/news",
-    "https://feeds.bbci.co.uk/sport/rss.xml" // Backup
+    "https://feeds.bbci.co.uk/sport/rss.xml"
   ],
   tecnologia: [
     "http://feeds.feedburner.com/TechCrunch/",
-    "https://www.theverge.com/rss/index.xml" // Backup
-  ],
-  politica: [
-    "https://www.politico.com/rss/politicopicks.xml",
-    "https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/section/politics/rss.xml" // Backup
-  ],
-  medioambiente: [
-    "https://grist.org/feed/",
-    "https://www.greenpeace.org/international/publication/rss/" // Backup
+    "https://www.theverge.com/rss/index.xml"
   ],
   entretenimiento: [
-    "https://variety.com/feed/",
-    "https://www.hollywoodreporter.com/feed/" // Backup
+    "https://www.hollywoodreporter.com/feed/",
+    "https://www.rollingstone.com/music/music-news/feed/"
+  ],
+  salud: [
+    "https://www.medicalnewstoday.com/rss",
+    "https://rss.cnn.com/rss/cnn_health.rss"
+  ],
+  negocios: [
+    "https://www.forbes.com/business/feed/",
+    "https://www.reuters.com/business/rss"
   ]
 };
 
-// Tiempo máximo de espera para cada request (8 segundos)
-const TIMEOUT = 8000;
-
-// Función para realizar fetch con timeout
-const fetchWithTimeout = (url, options) => {
-  return Promise.race([
-    fetch(url, options),
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("Request timed out")), TIMEOUT)
-    )
-  ]);
-};
-
-exports.handler = async (event) => {
+/**
+ * Sección 2: Manejo de parámetros y validación
+ * Valida la categoría proporcionada en la consulta.
+ */
+export async function handler(event) {
   const category = event.queryStringParameters?.category;
 
-  // Validar categoría
-  if (!FEEDS[category]) {
+  if (!category || !FEEDS[category]) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ error: "Categoría inválida. Usa una categoría válida." })
+      body: JSON.stringify({ error: "Categoría inválida. Usa una categoría válida como 'deportes', 'tecnologia', 'entretenimiento', 'salud' o 'negocios'." })
     };
   }
 
+  /**
+   * Sección 3: Obtención de noticias desde el feed RSS
+   * Intenta obtener las noticias de las URLs configuradas.
+   */
   const urls = FEEDS[category];
-  let response;
-
-  // Intentar obtener noticias de las URLs configuradas
   for (const url of urls) {
     try {
-      response = await fetchWithTimeout(url);
-      if (response.ok) {
-        const data = await response.text();
-        return {
-          statusCode: 200,
-          body: data
-        };
-      }
+      const feed = await parser.parseURL(url);
+      const articles = feed.items.map(item => ({
+        title: item.title,
+        link: item.link,
+        pubDate: item.pubDate,
+        image: item.enclosure?.url || item.media?.url || extractImageFromContent(item.content),
+        description: item.contentSnippet || item.summary || item.description
+      }));
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify(articles)
+      };
     } catch (error) {
-      console.error(`Error al obtener datos del feed: ${url}`, error);
+      console.error(`Error al procesar el feed: ${url}`, error);
     }
   }
 
-  // Si todas las URLs fallan
+  /**
+   * Sección 4: Manejo de errores
+   * Devuelve un error si no se pueden obtener noticias de los feeds configurados.
+   */
   return {
     statusCode: 500,
     body: JSON.stringify({ error: "No se pudieron obtener noticias de las fuentes configuradas." })
   };
-};
+}
+
+/**
+ * Función auxiliar: Extraer imagen desde el contenido HTML del feed.
+ */
+function extractImageFromContent(content) {
+  const regex = /<img[^>]+src="([^">]+)"/i;
+  const match = content?.match(regex);
+  return match ? match[1] : null;
+}
