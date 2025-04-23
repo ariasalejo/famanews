@@ -1,48 +1,82 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 FamaNews | Noticias de la BBC que Queman</title>
-
-    <meta property="og:title" content="FamaNews | Noticias de Última Hora">
-    <meta property="og:image" content="https://tuservidor.com/default-og-image.webp"> <meta property="og:url" content="https://tuservidor.com/">
-    <meta name="twitter:card" content="summary_large_image">
-
+    <title>FamaNews - Noticias en Tiempo Real</title>
+    <meta name="description" content="Portal de noticias actualizadas sobre deportes, tecnología, política y más">
     <link rel="stylesheet" href="assets/css/styles.css">
-
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
 </head>
 <body>
+    <!-- Cabecera -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">📰 FamaNews</h1>
+            <nav class="nav">
+                <button class="nav-toggle" aria-label="Abrir menú">☰</button>
+                <ul class="nav-menu">
+                    <li><a href="#deportes" class="nav-link">Deportes</a></li>
+                    <li><a href="#tecnologia" class="nav-link">Tecnología</a></li>
+                    <li><a href="#politica" class="nav-link">Política</a></li>
+                    <li><a href="#medioambiente" class="nav-link">Medio Ambiente</a></li>
+                    <li><a href="#entretenimiento" class="nav-link">Entretenimiento</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" aria-label="Cambiar tema">🌓</button>
+        </div>
+    </header>
 
-<nav class="nav-viral">
-    <div class="logo-neon">FamaNews</div>
-    <div class="menu-movil">☰</div>
-    <div class="enlaces-virales">
-        <a href="#virales" class="link-ardiente">🔥 Virales</a>
-        <a href="#shock" class="link-ardiente">💣 Shock</a>
-        <a href="#exclusivas" class="link-ardiente">🕵️ Exclusivas</a>
-    </div>
-</nav>
+    <!-- Contenido principal -->
+    <main class="main">
+        <!-- Sección de carga -->
+        <div class="loader-container">
+            <div class="loader"></div>
+            <p class="loading-text">Cargando noticias...</p>
+        </div>
 
-<div class="contador-vivo">
-    <span class="contador">🚨 <span id="vistas">Cargando...</span> Vistas</span>
-    <span class="contador">💥 <span id="compartidos">Cargando...</span> Compartidos</span>
-</div>
+        <!-- Secciones de noticias -->
+        <section id="deportes" class="category-section">
+            <h2 class="category-title">🏅 Últimas Noticias Deportivas</h2>
+            <div class="news-grid" id="deportes-news"></div>
+        </section>
 
-<main class="grid-noticias" id="gridNoticias">
-    <p>Cargando noticias...</p> </main>
+        <section id="tecnologia" class="category-section">
+            <h2 class="category-title">💻 Tecnología e Innovación</h2>
+            <div class="news-grid" id="tecnologia-news"></div>
+        </section>
 
-<div class="newsletter-bomba">
-    <h3>📧 ¡Conviértete en Viral Master!</h3>
-    <p>Recibe noticias 1 HORA ANTES que todos</p>
-    <input type="email" placeholder="tucorreo@ejemplo.com" class="input-viral">
-    <button class="boton-compartir">¡Quiero Ser Viral! 🚀</button>
-</div>
+        <section id="politica" class="category-section">
+            <h2 class="category-title">🌍 Política Internacional</h2>
+            <div class="news-grid" id="politica-news"></div>
+        </section>
 
-<script src="/js/main.js"></script>
+        <section id="medioambiente" class="category-section">
+            <h2 class="category-title">🌱 Medio Ambiente</h2>
+            <div class="news-grid" id="medioambiente-news"></div>
+        </section>
 
+        <section id="entretenimiento" class="category-section">
+            <h2 class="category-title">🎬 Entretenimiento</h2>
+            <div class="news-grid" id="entretenimiento-news"></div>
+        </section>
+
+        <!-- Botón para subir -->
+        <button class="back-to-top" aria-label="Volver arriba">↑</button>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 FamaNews - Todas las noticias actualizadas</p>
+            <div class="footer-links">
+                <a href="/politica-privacidad">Política de Privacidad</a>
+                <a href="/contacto">Contacto</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/news-loader.js"></script>
+    <script src="/js/theme-switcher.js"></script>
 </body>
 </html>
